@@ -37,12 +37,36 @@
 
 **线程池**<br>
  线程池主要处理流程:<br>
- 1. 线程池判断**核心线程池**里的线程是否都在执行任务。如果不是，则创建一个新的工作线程来执行任务。如果核心线程池里的线程都在执行任务，则进入下个流程<br>
+ 1. 线程池判断**核心线程池**里的线程是否都在执行任务。如果不是，则创建一个新的工作线程来执行任务。如果核心线程池里的线程都在执行任务，则进入到下个流程<br>
  2.线程池判断**工作队列**是否已满。如果工作队列没有满，则将新提交的任务存储在工作队列中。如果工作队列已满，则进入下个流程。<br>
  3.线程池判断**线程池**中的线程是否都处于工作状态。如果没有，则创建一个新的工作线程来执行任务。如果已满,即达到线程池允许的最大线程数，则交给**饱和策略**来处理这个任务。<br>
  
  **ThreadPoolExecutor**<br>
- * **FixedThreadPoolExecutor**<br>
- 1.FixedThreadPoolExecutor被称为可重用固定线程数的线程池<br>
- 2.FixedThreadPoolExecutor使用**无界队列**LinkedBlockingQueue作为线程池的工作队列<br>
+ * **FixedThreadPool**<br>
+ 1.FixedThreadPoolExecutor被称为可重用固定线程数的线程池,它的corePoolSize和maximumPoolSize值相等<br>
+ 2.FixedThreadPoolExecutor使用**无界队列LinkedBlockingQueue**作为线程池的工作队列<br>
  3.由于使用无界队列，所以没有饱和策略，不会拒绝任务。<br>
+ 
+ * **SingleThreadPoolExecutor**<br>
+ 1.SingleThreadPoolExecutor是单个线程的线程池，它的corePoolSize和maximumPoolSize值都为1<br>
+ 2.SingleThreadPoolExecutor使用**无界队列LinkedBlockingQueue**作为线程池的工作队列<br>
+ 
+ * **CachedThreadPool**<br>
+ 1.CachedThreadPool是一个没有容量限制的线程池，它会根据需要创建新的线程执行任务，没有特定的corePool<br>
+ 2.CachedThreadPool的corePoolSize为0，maximumPoolSize值为Integet.MAX_VALUE<br>
+ 3.keepAliveTime设置为60秒，空闲的线程最多等待60秒，否则被回收<br>
+ 4.工作队列使用没有容量的**synchronousQueue**，这是一个没有容量的阻塞队列，每个插入操作必须等待另一个线程的对应移除操作。当任务提交的速度大于线程处理的速度，系统会不断的创建新的线程。在极端情况下，可能会因创建过多线程而耗尽cpu资源<br>
+ 
+ * **ScheduledThreadPoolExecutor**<br>
+ 1.newScheduledThreadPool创建一个大小无限的线程池，支持定时以及周期性执行任务<br>
+ 2.使用**DelayedWorkQueue**作为工作队列，这是一个可延时执行阻塞任务的队列<br>
+ 
+**并发包中的阻塞对列**<br>
+Java并发包中的阻塞对列有7个，它们都是线程安全的<br>
+* ArrayBlockingQueue:由数组结构组成的有界阻塞对列<br>
+* LinkedBlockingQueue:由链表结构组成的有界阻塞对列<br>
+* PriorityBlockingQueue:支持优先级排序的无界阻塞对列<br>
+* DelayQueue:使用优先级队列实现的无界阻塞对列<br>
+* SynchronousQueue:不存储元素的阻塞对列<br>
+* LinkedTransferQueue:一个由链表组成的无界阻塞对列<br>
+* LinkedBlockingDeque:一个由链表结构组成的双向阻塞对列<br>
