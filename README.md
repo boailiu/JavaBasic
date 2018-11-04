@@ -75,3 +75,50 @@ Java并发包中的阻塞对列有7个，它们都是线程安全的<br>
 * LinkedTransferQueue:一个由链表组成的无界阻塞对列<br>
 * LinkedBlockingDeque:一个由链表结构组成的双向阻塞对列<br>
 ---
+
+**Java中的锁**<br>
+* **重入锁 ReentrantLock** <br>
+
+重入锁表示在同一个线程中，锁可以重复获得，同时，在释放锁的时候就需要多次释放锁。<br>
+ReentrantLock的重要方法：<br>
+lock()：获得锁，如果锁已经被占用，则等待。<br>
+lockInterruptibly():获得锁，但**优先响应中断**。<br>
+tryLock():尝试获得锁，如果成功，返回true，是在返回false。**该方法不等待，直接返回**。<br>
+tryLock(long time, TimeUnit unit):在给定时间内尝试获得锁。<br>
+unLock():释放锁。<br>
+重入锁的搭档Condition条件，Condition包含的方法aWait()和singal()类似于Object对象的wait()和notify()方法。<br>
+
+
+* **信号量 Semaphore** <br>
+
+信号量为多线程协作提供了更为强大的控制方法，信号量可以指定多个线程，同时访问某一个资源。构造信号量对象时，必须要指定信号量的准入数，也就是同时能申请多少个许可。每个线程每次只允许申请一个许可时，就相当于指定了多少个线程可以访问某一个资源。<br>
+Semaphore的重要方法：<br>
+acquire():尝试获得一个准入的许可。若无法获得，则线程会等待，直到有一个线程释放一个许可或者当前线程被中断。<br>
+acquireUninterruptibly():与acquire()类似，但是不响应中断。<br>
+tryAcquire():尝试获得一个许可，如果成功返回true，失败直接返回false，它不会进行等待，立即返回结果。<br>
+tryAcquire(long timeout, TimeUnit unit):给定一个等待的时间尝试获得许可，与tryAcquire()一样直接返回结果。<br>
+release():释放一个许可。<br>
+
+
+* **读写锁 ReadWriteLock** <br>
+
+读写锁允许多个线程同时读，但是写写之间会阻塞。<br>
+jdk中ReentrantReadWriteLock又有读锁readLock和写锁writeLock，可以分开操作。<br>
+
+
+* **倒计数器 CountDownLatch** <br>
+
+CountDownLatch是一个使用的多线程控制工具类，通常用来控制线程等待，它可以让一个线程等待**直到**倒计时结束，再开始执行。<br>
+public CountDownLatch(int count) 接受一个整数作为参数，即当前这个计数器的计数个数。<br>
+countDown() 执行一次countDown()方法，代表倒计时器-1 <br>
+
+
+* **循环栅栏 CyclicBarrier** <br>
+
+循环栅栏是另一个多线程并发控制实用工具。与CountDownLatch类似，它可以实现线程间的计数等待。<br>
+public CyclicBarrier(int parties, Runnable barrierAction) <br>
+CyclicBarrier可以接收一个参数作为barrierAction，就是当计数器一次计数完成后，系统会执行的动作。<br>
+
+
+
+
