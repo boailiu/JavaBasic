@@ -67,13 +67,13 @@
  
 **并发包中的阻塞对列**<br>
 Java并发包中的阻塞对列有7个，它们都是线程安全的<br>
-* ArrayBlockingQueue:由数组结构组成的有界阻塞对列<br>
-* LinkedBlockingQueue:由链表结构组成的有界阻塞对列<br>
-* PriorityBlockingQueue:支持优先级排序的无界阻塞对列<br>
-* DelayQueue:使用优先级队列实现的无界阻塞对列<br>
-* SynchronousQueue:不存储元素的阻塞对列<br>
-* LinkedTransferQueue:一个由链表组成的无界阻塞对列<br>
-* LinkedBlockingDeque:一个由链表结构组成的双向阻塞对列<br>
+* ArrayBlockingQueue:由数组结构组成的有界阻塞队列<br>
+* LinkedBlockingQueue:由链表结构组成的有界阻塞队列<br>
+* PriorityBlockingQueue:支持优先级排序的无界阻塞队列<br>
+* DelayQueue:使用优先级队列实现的无界阻塞队列<br>
+* SynchronousQueue:不存储元素的阻塞队列<br>
+* LinkedTransferQueue:一个由链表组成的无界阻塞队列<br>
+* LinkedBlockingDeque:一个由链表结构组成的双向阻塞队列<br>
 ---
 
 **Java中的锁**<br>
