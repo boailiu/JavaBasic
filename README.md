@@ -133,8 +133,15 @@ CopyOnWrite在读操作时是读取的**原数据**，而在进行写操作时�
 高效的并发队列，使用链表实现。可以看做是一个线程安全的linkedList。<br>
 * **BlockingQueue**<br>
 这是一个接口，jdk内部通过链表、数组等方式实现了这个接口。表示阻塞队列，非常适合用于数据共享的通道。<br>
+ArrayBlockingQueue基于数组实现，因为数组有界，所以更适合做有界队列<br>
+队列中放入元素，使用offer()和put()方法。offer()方法会立刻返回结果，put()方法则会进行阻塞。<br>
+队列取出元素，使用poll()和take()方法。同样的，poll()会立刻返回结果，而take()方法则会进行阻塞。<br>
+内部实现，使用了ReentrantLock和两个Condition（notEmpty,notFull）基于await()和signal()实现<br>
 * **ConcurrentSkipListMap**<br>
-跳表的实现。这是一个Map，使用跳表的数据结构进行快速查找。<br>
+跳表的实现。这是一个Map，使用跳表的数据结构进行快速查找。跳表内的数据是有序的，是一种以空间换时间的算法<br>
+跳表首先是有序的，然后内部由多条链表组成，最底层的链表包含了所有元素，每上面一层都是下面一层的子集，所以根据最上层的元素大小，可以很方便的进行查找当前元素是在这个元素的左边还是右边，增加了查找速度。<br>
+内部关键数据结构：Node节点-存储key和value，对应Map中的key和value，Node节点还有一个next指针节点。索引Index-它内部包装了Node，并增加了向下和向右的引用。HeadIndex-对于每一层的表头，还需要记录当前处于哪一层，所以用HeadIndex维护，表示头部的第一个Index，它继承自Index <br>
+
 
 
 
