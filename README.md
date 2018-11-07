@@ -114,10 +114,10 @@ countDown() 执行一次countDown()方法，代表倒计时器-1 <br>
 
 
 * **循环栅栏 CyclicBarrier** <br>
-
 循环栅栏是另一个多线程并发控制实用工具。与CountDownLatch类似，它可以实现线程间的计数等待。<br>
 public CyclicBarrier(int parties, Runnable barrierAction) <br>
 CyclicBarrier可以接收一个参数作为barrierAction，就是当计数器一次计数完成后，系统会执行的动作。<br>
+
 ---
 
 **Java中的并发容器**<br>
