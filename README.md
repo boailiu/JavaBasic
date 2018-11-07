@@ -126,6 +126,9 @@ CyclicBarrier可以接收一个参数作为barrierAction，就是当计数器一
 线程安全的HashMap<br>
 * **CopyOnWriteArrayList**<br>
 这是一个List，适合读多写少的场景，效率高于vector<br>
+由于读操作不会修改原有的数据，所以给读操作加锁是一种资源浪费。CopyOnWriteArrayList只有在写与写操作之间进行同步等待。<br>
+CopyOnWrite在读操作时是读取的**原数据**，而在进行写操作时会进行一次**自我复制**，形成一个副本，而写操作不会对原数据进行修改，而是对副本数据进行修改，再用修改后的副本替换原来的数据，这样保证了写操作不影响读。<br>
+因为内部实现的数组是**volatile**类型，所以修改之后读取线程可以立即察觉到这个修改（volatile的可见性）<br>
 * **ConcurrentLinkedQueue**<br>
 高效的并发队列，使用链表实现。可以看做是一个线程安全的linkedList。<br>
 * **BlockingQueue**<br>
