@@ -37,6 +37,46 @@
 
 ---
 
+**Java7和Java8中的HashMap**<br>
+<br>
+Java8的HashMap实现利用了数组+链表+红黑树 <br>
+1.put方法的实现,注意了解实现的细节<br>
+Java7中，计算存储在数组的具体位置，hash与table.length-1进行&运算，找到存储的数组下标。遍历对应下标处的链表，看是否有重复的key存在，如果已存在，直接覆盖；如果不存在，则添加到链表的表头（认为新插入的元素被使用的可能性比较大），此过程中还要注意是否需要进行扩容操作。<br>
+判断重复key的方法，e.hash == hash && ((k = e.key) == key || key.equals(k))，主要还是hash值和key值的比较。<br>
+Java8中，插入的规则有所不同，7是添加到表头，8是添加到链表的最后，还要判断链表的长度，长度超过8则需要转换为红黑树。由于引入了红黑树，同时还要判断要插入的节点是否为树节点。<br>
+
+2.get方法的实现<br>
+Java7中get()方法实现相对简单，根据key计算hash值，相同方法（**hash&table.length-1**）计算出数组下标,遍历该数组位置处的链表，直到找到相等(==或equals)的key,源代码**e.hash == hash &&((k = e.key) == key || (key != null && key.equals(k)))** <br>
+Java8中的get方法实现也相对简单。根据key计算hash值并找到对应的数组下标（hash & length -1）；判断数组该位置处的元素是否为我们所需要的，是的话直接返回；不是所需要的，则先判断该元素类型是否为TreeNode红黑树节点，如果是，则使用红黑树方法取数组；不是红黑树节点的话，遍历链表，找到对应key的值(**e.hash == hash &&((k = e.key) == key || (key != null && key.equals(k)))** )
+
+参考链接：https://javadoop.com/post/hashmap#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A7%BD%3A%20ensureSegment
+
+---
+
+**Java7和Java8中的ConcurrentHashMap**<br>
+<br>
+Java7中的ConcurrentHashMap与HashMap的思路差不多，由于支持并发操作，ConcurrentHashMap由一个个segment组成，又称为分段锁。<br>
+Java7中的ConcurrentHashMap可以理解为是一个segment数组，Segment又通过ReentrantLock来进行加锁，所以每次加锁操作锁住的是一个Segment，只要保证了Segment线程安全，也就保证了全局线程安全。<br>
+Java7中ConcurrentHashMap的concurrencyLevel，默认16，表示默认16个Segment，理论上支持16个线程的并发写操作。<br>
+1.put方法的实现<br>
+首先还是计算key的hash值；根据hash值找到Segment数组中的位置j；插入新值到segment中。
+segment内部中的put操作，segment由数组+链表组成。首先是获取segment独占锁；在利用hash值，与hashmap求数组下标运算相同（int index = (tab.length - 1) & hash;），求出要放置的数组下标；如果链表已经存在，接着遍历链表查找key；链表不存在，则设为链表表头；最后释放锁;<br>
+
+2.get方法的实现<br>
+Java7中get方法的实现还是比较简单的，并没有使用锁。首先计算hash值；根据hash找到对应的segment；找到segment内部数组相应位置的链表进行遍历； <br>
+
+Java8中的ConcurrentHashMap也引入了红黑树。<br>
+Java8中并没有使用7中的分段锁的思想，而是直接使用了synchronized关键字进行加锁操作。<br>
+1.put 方法<br>
+2.get方法<br>
+Java8中get方法也比较简单，也没有使用锁。首先计算hash值；根据hash值找到数组对应的位置(hash & n-1)；根据该位置处节点的性质进行相应查找：如果为null，直接返回null；如果为需要的节点，则直接返回该节点；如果该节点hash值小于0，说明正在进行扩容操作，或者是红黑树，调用find方法；如果不是这三种情况，那就是链表，进行链表的遍历；<br>
+
+
+
+参考链接：https://javadoop.com/post/hashmap#%E5%88%9D%E5%A7%8B%E5%8C%96%E6%A7%BD%3A%20ensureSegment
+
+---
+
 **内部类**<br>
 * **静态内部类**<br>
 1.不可访问外部的非静态资源，因为静态内部类对象的创建不依赖外部类，而外部类的非静态资源的创建是依赖外部类的，如果允许访问外部类非静态资源，则会产生矛盾<br>
