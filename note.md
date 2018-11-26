@@ -6,3 +6,5 @@ MQ，Redis等方面的总结文档<br>
 JVM方面的GC <br>
 
 NIO方面的知识 <br>
+
+socket网络知识 <br>
